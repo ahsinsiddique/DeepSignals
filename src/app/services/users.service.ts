@@ -81,7 +81,7 @@ export class UsersService {
     sessionStorage.removeItem('token');
     this.user = null;
     this.token = null;
-    this.router.navigateByUrl('/login');
+    this.router.navigateByUrl('/');
 
   }
 

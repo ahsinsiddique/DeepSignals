@@ -7,9 +7,11 @@ import { AdminComponent } from 'src/app/components /admin/admin.component';
 
 
 const routes: Routes = [
+  { path: '', component: LoginComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'admin', component: AdminComponent },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService] }
+  { path: 'admin', component: AdminComponent, canActivate: [AuthGuardService] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService] },
+
 ];
 
 @NgModule({

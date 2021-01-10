@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
 import { Router } from '@angular/router';
 import { Role } from 'src/app/models/Role';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 
 @Component({
@@ -9,7 +10,7 @@ import { Role } from 'src/app/models/Role';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   Role = Role;
 
   constructor(private usersService: UsersService,
@@ -29,7 +30,7 @@ export class LoginComponent implements OnInit {
     } else if (role === Role.Admin) {
       payload = { "email": 'admin@deepersignals.com', "password": 'password' };
     }
-    this.usersService.signIn(payload).subscribe((rsp) => {
+    this.usersService.signIn(payload).pipe(untilDestroyed(this)).subscribe((rsp) => {
       console.log(rsp);
       this.router.navigateByUrl('/dashboard');
 
@@ -38,5 +39,5 @@ export class LoginComponent implements OnInit {
     })
   }
 
-
+  ngOnDestroy() {}
 }

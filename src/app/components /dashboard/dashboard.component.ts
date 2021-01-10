@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AssessmentService } from 'src/app/services/assessment.service';
-import { Assessment, AssessmentGraph, AssessmentChartType } from 'src/app/models/model';
+import { Assessment, AssessmentChartType, AssessmentGraph } from 'src/app/models/model';
 import { Label } from 'ng2-charts';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { UsersService } from 'src/app/services/users.service';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   userAssessments = new Array<Assessment>();
   assessmentGraph = new AssessmentGraph();
 
@@ -25,26 +25,35 @@ export class DashboardComponent implements OnInit {
 
   public barChartData: ChartDataSets[] = [];
 
-  constructor(private assessmentService: AssessmentService,
-              private usersService: UsersService) { }
+  constructor(private assessmentService: AssessmentService) { }
 
   ngOnInit(): void {
 
-    this.assessmentService.getUserAssessments().subscribe((resp: Assessment[]) => {
+    this.assessmentService.getUserAssessments().pipe(untilDestroyed(this)).subscribe((resp: Assessment[]) => {
       this.userAssessments = resp
     })
 
   }
 
   onAssessmentSelected(id: number) {
-    this.assessmentService.getUserAssessmentsGraph(id).subscribe(resp => {
-      console.log(resp);
+    this.assessmentService.getUserAssessmentsGraph(id).pipe(untilDestroyed(this)).subscribe((resp: AssessmentGraph) => {
+      this.assessmentGraph = resp;
+      this.setGraphData();
+
+    }, error => {
+      // TODO need to remove after api work
+      this.setGraphData()
 
     })
+
+
+  }
+
+  setGraphData() {
     /**
      * TODO As API call was showing issues, So using static data for graph
      */
-    this.assessmentGraph = {
+    const assessmentGraph = {
       "data": {
         "Agreeableness": 13.333333333333334,
         "Drive": 21.666666666666668,
@@ -52,6 +61,9 @@ export class DashboardComponent implements OnInit {
         "Openess": 30
       }, "type": "bar" ? AssessmentChartType.BAR : AssessmentChartType.PIE // default type is PIE
     }
+
+    this.assessmentGraph = this.assessmentGraph.data? this.assessmentGraph: assessmentGraph;      // TODO remove after api fixed
+
 
     this.barChartData = [
       {
@@ -61,6 +73,5 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
-
-
+  ngOnDestroy() {}
 }
