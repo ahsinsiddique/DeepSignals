@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "deeper-signals-test"
+    }
+  },
+  "defaultProject": "deeper-signals-test",
+  "cli": {
+    "analytics": false
+  }
 }

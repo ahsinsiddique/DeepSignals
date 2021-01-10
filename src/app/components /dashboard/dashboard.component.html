@@ -1,0 +1,43 @@
+<ul ngbNav #nav="ngbNav" class="nav-tabs" >
+  <h4>Deeper Signals</h4>
+  <li ngbNavItem>
+    <a ngbNavLink>admin section</a>
+  </li>
+  <li ngbNavItem>
+    <a ngbNavLink>Dashboard</a>
+    <ng-template ngbNavContent>
+
+    </ng-template>
+  </li>
+</ul>
+<!--<div [ngbNavOutlet]="nav"></div>-->
+
+
+
+
+<div class="row">
+  <div class="col-md-4" *ngFor="let userAssessment of userAssessments">
+    <div class="card align-items-center">
+      <img class="card-img-top" src="{{userAssessment.image_url}}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{userAssessment.name}}</h5>
+        <p class="card-text">Resolved: {{userAssessment.users_resolved}}</p>
+        <a (click)="onAssessmentSelected(userAssessment.id)" class="btn btn-primary">ID: {{userAssessment.id}}</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<div style="display: block;" >
+  <canvas baseChart
+          [data]="pieChartData"
+          [labels]="pieChartLabels"
+          [chartType]="pieChartType"
+          [options]="pieChartOptions"
+          [plugins]="pieChartPlugins"
+          [legend]="pieChartLegend">
+  </canvas>
+</div>
