@@ -14,6 +14,17 @@ export class DashboardComponent implements OnInit {
   userAssessments = new Array<Assessment>();
   assessmentGraph = new AssessmentGraph();
 
+
+  public barChartOptions: ChartOptions = {
+    responsive: true,
+  };
+  public barChartLabels: Label[] = ['Agreeableness', 'Drive', 'Luck', 'Openess'];
+  public barChartType: ChartType = AssessmentChartType.BAR;
+  public barChartLegend = true;
+  public barChartPlugins = [];
+
+  public barChartData: ChartDataSets[] = [];
+
   constructor(private assessmentService: AssessmentService,
               private usersService: UsersService) { }
 
@@ -31,7 +42,7 @@ export class DashboardComponent implements OnInit {
 
     })
     /**
-     * TODO Ass API call was showing issues, So using static data for graph
+     * TODO As API call was showing issues, So using static data for graph
      */
     this.assessmentGraph = {
       "data": {
@@ -51,14 +62,5 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  public barChartOptions: ChartOptions = {
-    responsive: true,
-  };
-  public barChartLabels: Label[] = ['Agreeableness', 'Drive', 'Luck', 'Openess'];
-  public barChartType: ChartType = AssessmentChartType.BAR;
-  public barChartLegend = true;
-  public barChartPlugins = [];
-
-  public barChartData: ChartDataSets[] = [];
 
 }
