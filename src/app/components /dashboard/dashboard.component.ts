@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AssessmentService } from 'src/app/services/assessment.service';
-import { Assessment, AssessmentGraph } from 'src/app/model/model';
-import { Label, SingleDataSet, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
-import { ChartType, ChartOptions } from 'chart.js';
+import { Assessment, AssessmentGraph, AssessmentChartType } from 'src/app/models/model';
+import { Label } from 'ng2-charts';
+import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,49 +14,51 @@ export class DashboardComponent implements OnInit {
   userAssessments = new Array<Assessment>();
   assessmentGraph = new AssessmentGraph();
 
-  constructor(private assessmentService: AssessmentService) { }
+  constructor(private assessmentService: AssessmentService,
+              private usersService: UsersService) { }
 
   ngOnInit(): void {
+
     this.assessmentService.getUserAssessments().subscribe((resp: Assessment[]) => {
       this.userAssessments = resp
-      console.log(resp);
-      debugger
     })
 
-    monkeyPatchChartJsTooltip();
-    monkeyPatchChartJsLegend();
   }
 
   onAssessmentSelected(id: number) {
-    console.log(id);
     this.assessmentService.getUserAssessmentsGraph(id).subscribe(resp => {
       console.log(resp);
-      debugger
+
     })
+    /**
+     * TODO Ass API call was showing issues, So using static data for graph
+     */
     this.assessmentGraph = {
       "data": {
         "Agreeableness": 13.333333333333334,
         "Drive": 21.666666666666668,
         "Luck": 10,
         "Openess": 30
-      }, "type": "bar"
+      }, "type": "bar" ? AssessmentChartType.BAR : AssessmentChartType.PIE // default type is PIE
     }
 
-
+    this.barChartData = [
+      {
+        data: [this.assessmentGraph.data.Agreeableness, this.assessmentGraph.data.Drive, this.assessmentGraph.data.Luck,
+          this.assessmentGraph.data.Openess], label: 'Series A'
+      },
+    ];
   }
 
 
-  // ----------------------------------------- Charts
-
-  pieChartOptions: ChartOptions = {
+  public barChartOptions: ChartOptions = {
     responsive: true,
   };
-  pieChartLabels: Label[] = [['Agreeableness'], ['Drive'], 'Luck', 'Openess'];
-  pieChartData: SingleDataSet = [this.assessmentGraph.data.Agreeableness, this.assessmentGraph.data.Drive,
-    this.assessmentGraph.data.Luck, this.assessmentGraph.data.Openess];
-  pieChartType: ChartType = 'bar';
-  pieChartLegend = true;
-  pieChartPlugins = [];
+  public barChartLabels: Label[] = ['Agreeableness', 'Drive', 'Luck', 'Openess'];
+  public barChartType: ChartType = AssessmentChartType.BAR;
+  public barChartLegend = true;
+  public barChartPlugins = [];
 
+  public barChartData: ChartDataSets[] = [];
 
 }

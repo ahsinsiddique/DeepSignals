@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { apiUrl } from 'src/app/shared/config';
 import { Observable } from 'rxjs';
-import { Assessment } from 'src/app/model/model';
+import { Assessment } from 'src/app/models/model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,11 @@ export class AssessmentService {
     const url = `${this.baseUrl}userassessments`;
     return this.httpClient.get(url).pipe(map(assessment => assessment as Assessment[]));
   }
-// api/userassessments/graph
+
+  /**
+   * getUserAssessmentsGraph
+   * @param id
+   */
   getUserAssessmentsGraph(id: number) {
 
     const params = new HttpParams()

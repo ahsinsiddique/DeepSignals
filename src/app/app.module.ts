@@ -8,29 +8,33 @@ import { DashboardComponent } from './components /dashboard/dashboard.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
-import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbNavModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { TokenInterceptor } from 'src/app/services/token.interceptor';
 import { AdminComponent } from './components /admin/admin.component';
 import { ChartsModule } from 'ng2-charts';
+import { UserRoleDirective } from 'src/app/shared/user-role.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    AdminComponent
+    AdminComponent,
+    UserRoleDirective
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        RouterModule,
-        ReactiveFormsModule,
-        AppRoutingModule,
-        NgbNavModule,
-        ChartsModule
-    ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AppRoutingModule,
+    NgbNavModule,
+    ChartsModule,
+    NgbPaginationModule
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

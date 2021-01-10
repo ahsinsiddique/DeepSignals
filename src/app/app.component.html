@@ -1,5 +1,43 @@
+<header class="navbar navbar-expand navbar-dark bg-dark">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <a class="nav-link" [routerLink]="['/']">Home</a>
+    </li>
 
-<div class="container">
-  <router-outlet></router-outlet>
 
+    <!-- Admin only -->
+    <li class="nav-item" *appUserRole="isAdmin">
+      <a class="nav-link" [routerLink]="['admin']">Admin</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [routerLink]="['admin', 'dashboard']">Dashboard</a>
+    </li>
+
+    <!-- Anonymous only -->
+    <li class="nav-item" *ngIf="!isAuthorized">
+      <a class="nav-link" [routerLink]="['login']">Login</a>
+    </li>
+
+    <!-- Authorized only -->
+    <li class="nav-item" *ngIf="isAuthorized">
+      <a class="nav-link" (click)="logout()">Logout</a>
+    </li>
+  </ul>
+
+  <span class="navbar-text">
+      <span class="badge badge-warning" *ngIf="isAuthorized">Authorized</span>
+      <span class="badge badge-danger" *ngIf="isAdmin">Admin</span>
+    </span>
+</header>
+
+<div class="jumbotron">
+  <div class="container-fluid container">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<div class="text-center">
+  <p>
+    <a  target="_blank">https://ds-test-api.herokuapp.com/</a>, 2020
+  </p>
 </div>

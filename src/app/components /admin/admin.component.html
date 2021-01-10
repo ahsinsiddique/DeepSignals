@@ -1,0 +1,53 @@
+
+<div class="row">
+  <div class="offset-9">
+    <button class="btn btn-primary" (click)="downloadUsers()"> Download as CSV</button>
+  </div>
+
+</div>
+<table class="table table-striped" *ngIf="users">
+  <thead>
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">Select User</th>
+    <th scope="col">first_name</th>
+    <th scope="col">last_name</th>
+    <th scope="col">email</th>
+    <th scope="col">groups</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of displayUsers; index as i">
+    <th scope="row">{{ i + 1 }}
+    </th>
+    <td>
+      <div class="form-check ml-1">
+        <input #inputEl type="checkbox" class="form-check-input" id="checkbox" (change)="userSelected(user, inputEl.checked)">
+        <label class="form-check-label" for="checkbox"></label>
+      </div>
+    </td>
+
+    <td>
+
+      {{ user.first_name }}
+    </td>
+    <td>{{ user.last_name  }}</td>
+
+    <td>{{ user.email  }}</td>
+    <td>{{ user.groups  }}</td>
+  </tr>
+  </tbody>
+</table>
+
+
+<div class="d-flex justify-content-between p-2">
+  <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+                  (pageChange)="refreshUsers()">
+  </ngb-pagination>
+
+  <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshUsers()">
+    <option [ngValue]="2">2 items per page</option>
+    <option [ngValue]="4">4 items per page</option>
+    <option [ngValue]="6">6 items per page</option>
+  </select>
+</div>
